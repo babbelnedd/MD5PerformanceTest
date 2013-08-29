@@ -14,6 +14,7 @@ namespace MD5PerformanceTest
         {
             string resultStats = string.Empty;
 
+
             Console.WriteLine("Create value base.");
 
             List<List<string>> valList = new List<List<string>>();
@@ -49,7 +50,7 @@ namespace MD5PerformanceTest
             valList.Add(vals10000000);
 
             Console.WriteLine("Values created");
-           
+
 
 
             Stopwatch sw = new Stopwatch();
@@ -66,7 +67,7 @@ namespace MD5PerformanceTest
                 }
                 sw.Stop();
                 resultStats += ".NET-Method | " + vals.Count + " items | " + sw.Elapsed.TotalMilliseconds + " ms\r\n";
-                
+
             }
 
 
@@ -84,15 +85,30 @@ namespace MD5PerformanceTest
                 sw.Stop();
                 resultStats += ".Manual-Method | " + vals.Count + " items | " + sw.Elapsed.TotalMilliseconds + " ms\r\n";
             }
-            Console.Write(resultStats);           
+
+
+            Console.WriteLine("\r\nStart Guid Erzeugung...");
+            foreach (var vals in valList)
+            {
+                sw.Restart();
+                foreach (string s in vals)
+                {
+                    Guid.NewGuid();
+                }
+                sw.Stop();
+                resultStats += ".Guid-Method | " + vals.Count + " items | " + sw.Elapsed.TotalMilliseconds + " ms\r\n";
+            }
+
+
+            Console.Write(resultStats);
             Console.ReadKey();
 
         }
 
         static string GetMd5Hash(MD5 md5Hash, string input)
         {
-            byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));           
-         
+            byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
+
             StringBuilder sBuilder = new StringBuilder();
 
             for (int i = 0; i < data.Length; i++)
